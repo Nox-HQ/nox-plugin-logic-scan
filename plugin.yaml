@@ -1,0 +1,7 @@
+name: nox-plugin-logic-scan
+version: 0.1.0
+track: core-analysis
+description: LLM-assisted business logic vulnerability detection
+tools:
+  - name: scan
+    description: Scan for business logic vulnerabilities (IDOR, broken access control, mass assignment, race conditions)
