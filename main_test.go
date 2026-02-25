@@ -165,13 +165,3 @@ func invokeScan(t *testing.T, client pluginv1.PluginServiceClient, workspaceRoot
 	}
 	return resp
 }
-
-func findByRule(findings []*pluginv1.Finding, ruleID string) []*pluginv1.Finding {
-	var result []*pluginv1.Finding
-	for _, f := range findings {
-		if f.GetRuleId() == ruleID {
-			result = append(result, f)
-		}
-	}
-	return result
-}

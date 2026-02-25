@@ -248,7 +248,7 @@ func buildLogicPrompt(endpoints []Endpoint) string {
 	data, _ := json.MarshalIndent(summaries, "", "  ")
 
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("Analyze %d HTTP endpoints for business logic vulnerabilities.\n\n", len(endpoints)))
+	fmt.Fprintf(&sb, "Analyze %d HTTP endpoints for business logic vulnerabilities.\n\n", len(endpoints))
 	sb.WriteString("## Endpoints\n\n")
 	sb.WriteString(string(data))
 	return sb.String()

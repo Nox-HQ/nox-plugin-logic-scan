@@ -250,24 +250,26 @@ func extractJSEndpoints(content, filePath, lang string) []Endpoint {
 	// Detect Next.js API routes from file path.
 	if isNextAPIRoute(filePath) {
 		for lineNum, line := range lines {
-			if m := jsNextAPIRoute.FindStringSubmatch(line); m != nil {
-				handler := m[1]
-				method := "ANY"
-				upper := strings.ToUpper(handler)
-				if upper == "GET" || upper == "POST" || upper == "PUT" || upper == "DELETE" || upper == "PATCH" {
-					method = upper
-				}
-				endpoints = append(endpoints, Endpoint{
-					Method:   method,
-					Path:     filePath,
-					Handler:  handler,
-					FilePath: filePath,
-					Line:     lineNum + 1,
-					Language: lang,
-					Code:     extractJSHandlerCode(lines, lineNum),
-					HasAuth:  hasFileAuth,
-				})
+			m := jsNextAPIRoute.FindStringSubmatch(line)
+			if m == nil {
+				continue
 			}
+			handler := m[1]
+			method := "ANY"
+			upper := strings.ToUpper(handler)
+			if upper == "GET" || upper == "POST" || upper == "PUT" || upper == "DELETE" || upper == "PATCH" {
+				method = upper
+			}
+			endpoints = append(endpoints, Endpoint{
+				Method:   method,
+				Path:     filePath,
+				Handler:  handler,
+				FilePath: filePath,
+				Line:     lineNum + 1,
+				Language: lang,
+				Code:     extractJSHandlerCode(lines, lineNum),
+				HasAuth:  hasFileAuth,
+			})
 		}
 	}
 
@@ -300,11 +302,11 @@ func isIdentifier(s string) bool {
 	}
 	for i, c := range s {
 		if i == 0 {
-			if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '$') {
+			if (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && c != '_' && c != '$' {
 				return false
 			}
 		} else {
-			if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_' || c == '$') {
+			if (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && c != '_' && c != '$' {
 				return false
 			}
 		}
